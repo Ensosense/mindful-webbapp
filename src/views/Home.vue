@@ -1,11 +1,14 @@
 <template>
   <div class="home">
-    <div v-for="blog in blogs" :key="blog.id">
+    <div class="prompt-form-container">
+      <PromptForm @hokku-received="handleHokkuReceived" />
+    </div>
+    <div v-for="hokku in hokkus" :key="hokku.id">
       <div class="blog">
-        <h3>{{ blog.title }}</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur aspernatur consectetur doloremque sunt ducimus enim iure animi fugit nulla et! Perferendis autem deleniti quo eum corrupti reiciendis voluptatem ab ducimus?</p>
+        <h3>{{ hokku.title }}</h3>
+        <p>{{ hokku.text }}</p>
         <div class="icons">
-          <span>upvote or downvote this article: </span>
+          <span class="icons-text">upvote or downvote this article: </span>
           <span class="material-icons">thumb_up</span>
           <span class="material-icons">thumb_down</span>
         </div>
@@ -15,19 +18,48 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import PromptForm from '@/components/PromptForm.vue'
 
 export default {
+  components: {
+    PromptForm
+  },
   setup() {
-    const blogs = ref([
-      { title: 'Why Coffee is Better than Tea', id: 1 },
-      { title: '...Then I Took an Arrow in the Knee', id: 2 },
-      { title: 'Mario vs Luigi, Ultimate Showdown', id: 3 },
+    const hokkus = ref([
+      { title: 'Summer Haiku', id: 1, text: 'Gentle breeze whispers, natures song in harmony, summers sweet embrace.' },
+      { title: 'Summer melancholy', id: 2, text: 'Sun-kissed fields of gold, natures warm embrace, summers song.' },
+      { title: 'Dreamy summer', id: 3, text: 'Cicadas hum loud...' },
     ])
 
-    return { 
-      blogs
+    const store = useStore()
+
+    const handleHokkuReceived = (hokku) => {
+      if (store.state.authToken) {
+        // Add the received hokku to the list of blogs
+        hokkus.value.push({
+          title: hokku.title,
+          id: hokkus.value.length + 1 // Generate a unique id
+        })
+      } else {
+        alert('You need to log in to save your hokku.')
+      }
+    }
+
+    onMounted(async () => {
+      if (store.state.authToken) {
+        // Fetch hokkus from the backend if the user is authenticated
+        await store.dispatch('fetchHokkus')
+      }
+    })
+
+    return {
+      hokkus,
+      handleHokkuReceived
     }
   }
 }
 </script>
+
+
