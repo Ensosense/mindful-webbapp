@@ -1,4 +1,5 @@
 <template>
+  <img src="../assets/3.jpg" alt="Example Image" />
   <div class="home">
     <div class="prompt-form-container">
       <PromptForm @hokku-received="handleHokkuReceived" />
@@ -18,48 +19,66 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import PromptForm from '@/components/PromptForm.vue'
+import { ref, onMounted } from "vue";
+import { useStore } from "vuex";
+import PromptForm from "@/components/PromptForm.vue";
 
 export default {
   components: {
-    PromptForm
+    PromptForm,
   },
   setup() {
     const hokkus = ref([
-      { title: 'Summer Haiku', id: 1, text: 'Gentle breeze whispers, natures song in harmony, summers sweet embrace.' },
-      { title: 'Summer melancholy', id: 2, text: 'Sun-kissed fields of gold, natures warm embrace, summers song.' },
-      { title: 'Dreamy summer', id: 3, text: 'Cicadas hum loud...' },
-    ])
+      {
+        title: "Summer Haiku",
+        id: 1,
+        text: "Gentle breeze whispers, natures song in harmony, summers sweet embrace.",
+      },
+      {
+        title: "Summer melancholy",
+        id: 2,
+        text: "Sun-kissed fields of gold, natures warm embrace, summers song.",
+      },
+      { title: "Dreamy summer", id: 3, text: "Cicadas hum loud..." },
+    ]);
 
-    const store = useStore()
+    const store = useStore();
 
     const handleHokkuReceived = (hokku) => {
       if (store.state.authToken) {
         // Add the received hokku to the list of blogs
         hokkus.value.push({
           title: hokku.title,
-          id: hokkus.value.length + 1 // Generate a unique id
-        })
+          id: hokkus.value.length + 1, // Generate a unique id
+        });
       } else {
-        alert('You need to log in to save your hokku.')
+        alert("You need to log in to save your hokku.");
       }
-    }
+    };
 
     onMounted(async () => {
       if (store.state.authToken) {
         // Fetch hokkus from the backend if the user is authenticated
-        await store.dispatch('fetchHokkus')
+        await store.dispatch("fetchHokkus");
       }
-    })
+    });
 
     return {
       hokkus,
-      handleHokkuReceived
-    }
-  }
-}
+      handleHokkuReceived,
+    };
+  },
+};
 </script>
 
+<style scoped>
+img {
+  border-radius: 5px;
+  width: 30%;
+  height: auto;
+  margin-left: 75%;
+  margin-bottom: 5%;
+  margin-top: 3%;
+}
+</style>
 

@@ -5,21 +5,20 @@
 /* base styles */
 body {
   font-family: "Poppins";
-  
-
 }
+
 .container {
   max-width: 960px;
   margin: 0 auto;
- 
+  margin-bottom: 10%;
+  margin-top: 5%;
 }
 
 /* navbar */
-
 nav {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Add this line */
+  justify-content: space-between; 
 }
 nav h1 {
   color: #555;
@@ -38,7 +37,7 @@ nav span {
   color: #777;
 }
 button {
-  background:rgb(149, 148, 130);
+  background:hsl(220, 13%, 42%);
   border: 0;
   padding: 6px 10px;
   border-radius: 20px;
@@ -59,7 +58,7 @@ button {
   color: rgb(129, 128, 121);
 }
 .blog .icons {
-  color: #555;
+  color: #525c79;
   font-weight: bold;
   display: flex;
   align-items: center;
